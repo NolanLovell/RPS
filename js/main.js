@@ -11,11 +11,10 @@ const scoreboard = {
 // Play game
 function play(e) {
     restart.style.display = 'inline-block';
-    const playerChoice = (e.target.id);
+    const playerChoice = e.target.id;
     const computerChoice = getComputerChoice();
     const winner = getWinner(playerChoice, computerChoice);
-
-    console.log(playerChoice, computerChoice, winner);
+    showWinner(winner, computerChoice);
 
 }
 
@@ -23,11 +22,11 @@ function play(e) {
 function getComputerChoice() {
     const rand = Math.random();
     if(rand < 0.34) {
-        return 'rock';
+      return 'rock';
     } else if(rand <= 0.67) {
-        return 'paper';
+      return 'paper';
     } else {
-        return 'scissors';
+      return 'scissors';
     }
 }
 
@@ -55,6 +54,42 @@ function getWinner(p, c) {
         }
     }
 }
+
+function showWinner(winner, computerChoice) {
+    if (winner === 'player') {
+        // Adding to player score
+        scoreboard.player++;
+        // Showing modal result
+        result.innerHTML = `
+            <h1 class="text-win">You Win!</h1>
+            <i class="fas fa-hand-${computerChoice} fa-10x"></i>
+            <p>Computer chose <strong>${computerChoice}</strong></p>
+            `;
+    } else if(winner === 'computer') {
+        // Adding to computer score
+        scoreboard.player++;
+        // Showing modal result
+        result.innerHTML = `
+            <h1 class="text-lose">Computer Wins!</h1>
+            <i class="fas fa-hand-${computerChoice} fa-10x"></i>
+            <p>Computer chose <strong>${computerChoice}</strong></p>
+            `;
+    } else {
+        result.innerHTML = `
+            <h1>It's a draw!</h1>
+            <i class="fas fa-hand-${computerChoice} fa-10x"></i>
+            <p>Computer chose <strong>${computerChoice}</strong></p>
+            `;
+    }
+    // Show score
+    score.innerHTML = `
+        <p>Player: ${scoreboard.player}</p>
+        <p>Computer: ${scoreboard.computer}</p>
+        `;
+    
+    modal.style.display = 'block';
+}
+
 
 // Event Listeners
 choices.forEach(choice => choice.addEventListener('click', play));
